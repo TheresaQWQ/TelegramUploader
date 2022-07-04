@@ -16,7 +16,7 @@ for(const item of target) {
 
   data[item] = {
     "template": "",
-    "chat": "@FFEE_CO",
+    "chat": "",
     "tasks": files.map(file => {
       return {
         file: path.join(item, file),
@@ -25,3 +25,5 @@ for(const item of target) {
     })
   }
 }
+
+fs.writeFileSync('task.json', JSON.stringify(data, null, 2))
