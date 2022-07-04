@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "axios": "^0.27.2",
+    "fetch-video-metadata": "^1.2.2",
+    "input": "^1.0.1",
+    "request": "^2.88.2",
+    "tdl": "^7.0.0",
+    "telegram": "^2.9.8"
+  }
+}
