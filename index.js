@@ -69,9 +69,9 @@ const upload = async (file, target, text) => {
   const w = videoStream.width
   const h = videoStream.height
   const duration = Math.round(Number(videoStream.duration))
-  const total = fs.statSync(file).size / 1024 / 1024
+  const total = fs.statSync(file).size / 1024
 
-  const bar = new ProgressBar(`Uploading [:bar] :rateMB/s :percent :etas`, {
+  const bar = new ProgressBar(`Uploading [:bar] :rate/kbps :percent :etas`, {
     total: total
   })
 
