@@ -4,6 +4,7 @@ const input = require('input')
 const path = require('path');
 const fs = require('fs');
 const child_process = require('child_process')
+const ProgressBar = require('progress')
 
 const getArgv = (key, short) => {
   const argv = process.argv.slice(2);
@@ -68,13 +69,25 @@ const upload = async (file, target, text) => {
   const w = videoStream.width
   const h = videoStream.height
   const duration = Math.round(Number(videoStream.duration))
+  const total = fs.statSync(file).size
 
-  const msg = await telegram.sendFile(target, {
+  const bar = new ProgressBar(`Uploading [:bar] :rate/bps :percent :etas`, {
+    total: total
+  })
+
+  let prev = 0
+
+  await telegram.sendFile(target, {
     file: file,
     videoNote: true,
     caption: text,
     supportsStreaming: true,
-    progressCallback: (progress) => console.log(`uploading... ${(progress * 100).toFixed(3)}%`),
+    progressCallback: (progress) => {
+      const curr = progress * total
+      const diff = curr - prev
+      prev = curr
+      bar.tick(diff)
+    },
     attributes: [new gramJS.Api.DocumentAttributeVideo({
       w: w,
       h: h,
@@ -82,9 +95,6 @@ const upload = async (file, target, text) => {
       supportsStreaming: true,
     })]
   })
-
-  console.log(msg)
-  console.log(`uploaded`)
 }
 
 (async () => {
@@ -130,7 +140,10 @@ const upload = async (file, target, text) => {
 
         try {
           await upload(task.file, target, text)
+          console.log('\n')
         } catch (error) {
+          console.log('\n')
+          console.error(`上传失败: ${error.messgae}`)
           fail.push(`${name}[${index}, ${task.file}]: ${error.message}`)
         }
 
