@@ -143,7 +143,7 @@ const upload = async (file, target, text) => {
           console.log('\n')
         } catch (error) {
           console.log('\n')
-          console.error(`上传失败: ${error.messgae}`)
+          console.error(`上传失败:`, error)
           fail.push(`${name}[${index}, ${task.file}]: ${error.message}`)
         }
 
